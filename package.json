@@ -1,0 +1,23 @@
+{
+  "name": "alternatetwitmension",
+  "version": "1.0.0",
+  "description": "Get alternate universe tweets",
+  "main": "main.js",
+  "scripts": {
+    "test": "start"
+  },
+  "keywords": [
+    "Twitter",
+    "RiTa",
+    "Text",
+    "Generation"
+  ],
+  "author": "Corey Robinson",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "twitter": "^1.7.0",
+    "vue": "^2.2.1"
+  }
+}
