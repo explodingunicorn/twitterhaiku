@@ -6,6 +6,7 @@ var client = new Twitter({
   access_token_key: '403000276-KNQp8tCf2MKc8Hgoz0QMbd2eH75fYeGLwPMS3ECQ',
   access_token_secret: 'GzanOJn1i4ehryEncdA4Dn8BEUP6ILUPmvTMEmTRDOTNR'
 });
+
 var stream = function() {
     client.stream('statuses/filter', {track: 'javascript'}, function(stream) {
       stream.on('data', function(event) {
@@ -23,7 +24,9 @@ var getTweets = function(user, callback) {
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
       if (!error) {
         callback(tweets);
-      }
+    } else {
+        console.log(error);
+    }
     });
 }
 

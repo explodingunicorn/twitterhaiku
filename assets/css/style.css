@@ -1,0 +1,11 @@
+.twitterSearch {
+    border-right: none;
+    border-left: none;
+    border-top: none;
+    border-bottom: 1px #eeeeee solid;
+}
+
+.twitterSearch:focus {
+    box-shadow: none;
+    border-bottom: 2px #eeeeee solid;
+}
