@@ -1,11 +1,75 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600,700|Quattrocento:400,700');
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
 .twitterSearch {
     border-right: none;
     border-left: none;
     border-top: none;
     border-bottom: 1px #eeeeee solid;
+    font-family: 'Open Sans';
+    font-size: 32px;
+    font-weight: 300;
+    text-align: center;
+    width: 100%;
 }
 
 .twitterSearch:focus {
     box-shadow: none;
-    border-bottom: 2px #eeeeee solid;
+    outline: none;
+}
+
+h1 {
+    font-family: 'Quattrocento';
+    font-weight: 700;
+    font-size: 42px;
+    margin-top: 0;
+    text-align: center;
+}
+
+p {
+    font-family: 'Quattrocento';
+    font-weight: 400;
+    font-size: 24px;
+    text-align: center;
+}
+
+.submit {
+    display: inline-block;
+    font-size: 28px;
+    font-family: 'Open Sans';
+    font-weight: 700;
+    padding: 15px;
+    text-align: center;
+    margin-top: 30px;
+    border: 1px solid black;
+    border-radius: 2px;
+}
+
+.submit:hover {
+    color: white;
+    background-color: black;
+    cursor: pointer;
+
+}
+
+.app {
+    display: block;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+}
+
+.form {
+    width: 100%;
 }

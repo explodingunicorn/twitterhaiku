@@ -19,7 +19,18 @@ var stream = function() {
     });
 };
 
-var getTweets = function(user, callback) {
+var getSearchTweets = function(search, callback) {
+    var params = {q: search, count: 200};
+    client.get('search/tweetse', params, function(error, tweets, response) {
+      if (!error) {
+        callback(tweets);
+    } else {
+        console.log(error);
+    }
+    });
+}
+
+var getUserTweets = function(user, callback) {
     var params = {screen_name: user, count: 200};
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
       if (!error) {
@@ -31,6 +42,7 @@ var getTweets = function(user, callback) {
 }
 
 module.exports = {
-    getTweets: getTweets,
+    userTweets: getUserTweets,
+    searchTweets: getSearchTweets,
     stream: stream
 }

@@ -99,8 +99,15 @@ function checkSyllables(trimmedText, originalText) {
     }
 }
 
-var createHaikuTweets = function(data) {
-    var tweets = data;
+var createHaikuTweets = function(data, type) {
+    if(type === 'user') {
+        var tweets = data;
+    }
+    else {
+        var tweets = data
+        console.log(data);
+    }
+
     var tweetText;
     var haikuArray = [];
     for (var i = 0; i < tweets.length; i++) {
@@ -127,17 +134,27 @@ var createHaikuTweets = function(data) {
     }
 }
 
-$('#submit').click(function() {
+$('.submit').click(function() {
+    var value = $('.twitterSearch').val();
+    var tweetType;
+    if (value[0] === '@') {
+        value[0] = '';
+        tweetType = 'user';
+    }
+    else {
+        tweetType = 'search';
+    }
+
     $.ajax({
         url: '/',
         type: 'POST',
         contentType: "application/json",
-        data: JSON.stringify({twitterHandle: "HalfBlackRanger"}),
+        data: JSON.stringify({type: tweetType, twitterHandle: value}),
         complete: function() {
             console.log('process done');
         },
         success: function(data) {
-            createHaikuTweets(data.tweets);
+            createHaikuTweets(data.tweets, tweetType);
         },
         error: function() {
             console.log('There was an error');
