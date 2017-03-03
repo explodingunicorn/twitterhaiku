@@ -6,12 +6,36 @@
 
     <body>
         <div class="app">
-            <h1>Twitter Haiku</h1>
-            <p>Search a username or topic on twitter and see if any of the tweets are Haiku's.</p>
-            <form>
-                <input class="twitterSearch" type="text" name="twitterHandle" placeholder="@User or Search Term"/>
-            </form>
-            <h2 class="submit">SEARCH</h2>
+            <div v-if="!loading && !search" class="searchBar">
+                <input id="fixedTwitterSearch" class="twitterSearch" type="text" name="twitterHandle" placeholder="@User or Search Term" @keyup.enter="reSearchTweets"//>
+            </div>
+            <div class="center">
+                <div v-if="search">
+                    <h1>{{title}}</h1>
+                    <p>Search a username or topic on twitter and see if any of the tweets are Haiku's.</p>
+                    <input class="twitterSearch" type="text" name="twitterHandle" placeholder="@User or Search Term" @keyup.enter="searchTweets"/>
+                    <h2 v-on:click="searchTweets" class="submit">SEARCH</h2>
+                </div>
+                <div v-if="loading && retrieving">
+                    <h1>Retrieving tweets<span class="blink1">.</span><span class="blink2">.</span><span class="blink3">.</span></h1>
+                </div>
+                <div v-if="loading && !retrieving">
+                    <h1 v-if="!retrieving">Tweets Recieved</h1>
+                    <h1 v-if="!retrieving">Analyzing tweets<span class="blink1">.</span><span class="blink2">.</span><span class="blink3">.</span></h1>
+                </div>
+                <div class="haikus">
+                    <div v-if="!loading && !search">
+                        <img v-bind:src="haikus[index].userImg" />
+                        <a class="twitterHandle" v-bind:href="twitterLink">@{{haikus[index].userName}}</a>
+                        <div v-html="haikus[index].haiku"></div>
+                    </div>
+                </div>
+                <div class="navigation" v-if="!loading && !search">
+                    <h3 v-if="index > 0" v-on:click="index--" class="move">< prev</h3>
+                    <h3>{{index+1}} of {{haikus.length}}</h3>
+                    <h3 v-if="index < haikus.length - 1" v-on:click="index++" class="move">next ></h3>
+                </div>
+            </div>
         </div>
         <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"

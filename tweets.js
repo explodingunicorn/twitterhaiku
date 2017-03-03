@@ -19,30 +19,65 @@ var stream = function() {
     });
 };
 
-var getSearchTweets = function(search, callback) {
-    var params = {q: search, count: 200};
-    client.get('search/tweetse', params, function(error, tweets, response) {
-      if (!error) {
-        callback(tweets);
-    } else {
-        console.log(error);
-    }
+var tweetArray = [];
+
+var getSearchTweets = function(params, callback, count) {
+    client.get('search/tweets', params, function(error, tweets, response) {
+        if (!error) {
+            tweets = tweets.statuses;
+            if (tweets.length > 0 && count > 0) {
+                params.max_id = tweets[tweets.length-1].id;
+                count--;
+                getSearchTweets(params, callback, count);
+                console.log('reading more tweets');
+            }
+            else {
+                var doCallback = true
+            }
+
+            tweetArray = tweetArray.concat(tweets);
+
+            if (doCallback) {
+                callback(tweetArray);
+                console.log('done');
+            }
+        } else {
+            console.log(error);
+        }
     });
 }
 
-var getUserTweets = function(user, callback) {
-    var params = {screen_name: user, count: 200};
+var getUserTweets = function(params, callback) {
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
-      if (!error) {
-        callback(tweets);
-    } else {
-        console.log(error);
-    }
+        if (!error) {
+            if (tweets.length > 1) {
+                params.max_id = tweets[tweets.length-1].id;
+                getUserTweets(params, callback);
+                console.log('reading more tweets');
+            }
+            else {
+                var doCallback = true
+            }
+
+            tweetArray = tweetArray.concat(tweets);
+
+            if (doCallback) {
+                callback(tweetArray);
+                console.log('done');
+            }
+        } else {
+            console.log(error);
+        }
     });
+}
+
+var clearTweetArray = function() {
+    tweetArray = [];
 }
 
 module.exports = {
-    userTweets: getUserTweets,
-    searchTweets: getSearchTweets,
+    getUserTweets: getUserTweets,
+    getSearchTweets: getSearchTweets,
+    clearTweetArray: clearTweetArray,
     stream: stream
 }

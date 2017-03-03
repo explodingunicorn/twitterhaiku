@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,600,700|Quattrocento:400,700');
 
+html {
+    width: 100%;
+    height: 100%;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -25,6 +30,13 @@ body {
     outline: none;
 }
 
+.searchBar {
+    position: fixed;
+    top: 10px;
+    width: 60%;
+    margin-left: 20%;
+}
+
 h1 {
     font-family: 'Quattrocento';
     font-weight: 700;
@@ -33,11 +45,45 @@ h1 {
     text-align: center;
 }
 
+h3 {
+    font-family: 'Quattrocento';
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.haikus h3 {
+    font-size: 26px;
+}
+
+.twitterHandle {
+    margin-top: 15px;
+    font-family: 'Quattrocento';
+    font-size: 26px;
+    color: navy;
+    text-decoration: none;
+    display: block;
+}
+
+.move:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.navigation h3 {
+    display: inline-block;
+    margin: 0px 10px;
+}
+
 p {
     font-family: 'Quattrocento';
     font-weight: 400;
     font-size: 24px;
     text-align: center;
+}
+
+.haikus p {
+    font-size: 30px;
+    line-height: 40px;
 }
 
 .submit {
@@ -48,19 +94,32 @@ p {
     padding: 15px;
     text-align: center;
     margin-top: 30px;
-    border: 1px solid black;
+    border: 1px solid #333;
     border-radius: 2px;
 }
 
 .submit:hover {
     color: white;
-    background-color: black;
+    background-color: #333;
     cursor: pointer;
 
 }
 
 .app {
+    color: #333;
     display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    padding: 5px;
+    border: 1px solid #333;
+    border-radius: 2px;
+}
+
+.center {
     width: 60%;
     margin-left: auto;
     margin-right: auto;
@@ -70,6 +129,38 @@ p {
     text-align: center;
 }
 
-.form {
-    width: 100%;
+@keyframes blink1 {
+    0% {opacity: 0;}
+    20% {opacity: 1;}
+    80% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+@keyframes blink2 {
+    0% {opacity: 0;}
+    40% {opacity: 1;}
+    80% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+@keyframes blink3 {
+    0% {opacity: 0;}
+    60% {opacity: 1;}
+    80% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+.blink1 {
+    animation: blink1 3s infinite !important;
+    display: inline-block;
+}
+
+.blink2 {
+    animation: blink2 3s infinite;
+    display: inline-block;
+}
+
+.blink3 {
+    animation: blink3 3s infinite;
+    display: inline-block;
 }

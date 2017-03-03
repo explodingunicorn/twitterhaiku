@@ -1,3 +1,9 @@
+var Haiku = function(haiku, user, img) {
+    this.haiku = haiku;
+    this.userName = user;
+    this.userImg = img;
+}
+
 function correctSymbols(sylArray) {
     for (var i = 0; i < sylArray.length; i++) {
         if (sylArray[i] === '@') {
@@ -26,23 +32,33 @@ function checkSpecialChar(syl) {
 
 function isHaiku(text) {
     trimmedText = RiTa.stripPunctuation(text);
-    var syllables = RiTa.getSyllables(trimmedText);
-    syllables = syllables.replace(new RegExp('/', 'g'), ' ').split(' ');
-    syllables = correctSymbols(syllables);
-    var amountOfSyllables = syllables.length;
+    var readable = true;
 
-    if (amountOfSyllables === 17) {
-        for (var i = 0; i < amountOfSyllables; i++) {
-            var syl = syllables[i];
-            if(checkSpecialChar(syl)) {
-                return false;
-                break;
-            }
-        }
-        return checkSyllables(trimmedText.split(' '), text);
+    try {
+        var syllables = RiTa.getSyllables(trimmedText);
     }
-    else {
-        return false;
+    catch(e) {
+        readable = false;
+    }
+
+    if(readable) {
+        syllables = syllables.replace(new RegExp('/', 'g'), ' ').split(' ');
+        syllables = correctSymbols(syllables);
+        var amountOfSyllables = syllables.length;
+
+        if (amountOfSyllables === 17) {
+            for (var i = 0; i < amountOfSyllables; i++) {
+                var syl = syllables[i];
+                if(checkSpecialChar(syl)) {
+                    return false;
+                    break;
+                }
+            }
+            return checkSyllables(trimmedText.split(' '), text);
+        }
+        else {
+            return false;
+        }
     }
 }
 
@@ -54,17 +70,21 @@ function checkSyllables(trimmedText, originalText) {
     var check5 = false;
     var check7 = false;
     var i = 0;
+    var haikuFormation = {
+        firstLine: 0,
+        secondLine: 0,
+    }
+
     for (i; i < text.length; i++) {
         var syls = RiTa.getSyllables(text[i]);
         syls = syls.replace(new RegExp('/', 'g'), ' ').split(' ');
         syls = correctSymbols(syls);
         sylCount += syls.length;
 
-        console.log(syls);
         if(sylCount === 5) {
-            console.log('5');
             check5 = true;
             sylCount = 0;
+            haikuFormation.firstLine = i;
             i++;
             break;
         }
@@ -78,10 +98,9 @@ function checkSyllables(trimmedText, originalText) {
             syls = correctSymbols(syls);
             sylCount += syls.length;
 
-            console.log(syls);
             if(sylCount === 7) {
-                console.log('7');
                 check7 = true;
+                haikuFormation.secondLine = i;
                 break;
             }
         }
@@ -92,21 +111,32 @@ function checkSyllables(trimmedText, originalText) {
 
     if (check7) {
         console.log('This is a haiku:');
-        return originalText;
+        return (haikuFormation);
     }
     else {
         return false;
     }
 }
 
-var createHaikuTweets = function(data, type) {
-    if(type === 'user') {
-        var tweets = data;
+var formatHaiku = function(text, form) {
+    var textArr = text.split(' ');
+    console.log(form);
+    for (var i = 0; i < textArr.length; i++) {
+        if(i === form.firstLine) {
+            textArr[i] = textArr[i] + '<br>';
+            console.log('newline');
+        }
+        else if(i === form.secondLine) {
+            textArr[i] = textArr[i] + '<br>';
+            console.log('newline');
+        }
     }
-    else {
-        var tweets = data
-        console.log(data);
-    }
+
+    return '<p>' + textArr.join(' ') + '</p>';
+}
+
+var createHaikuTweets = function(data) {
+    var tweets = data;
 
     var tweetText;
     var haikuArray = [];
@@ -124,40 +154,94 @@ var createHaikuTweets = function(data, type) {
         }
         untokenizedText = RiTa.untokenize(tweetArray)
         tweetText += untokenizedText + ' ';
-        var haiku = isHaiku(untokenizedText);
-        if (haiku) {
-            haikuArray.push(tweet);
+        var haikuForm = isHaiku(untokenizedText);
+
+        if (haikuForm) {
+            formattedHaiku = formatHaiku(tweet, haikuForm);
+            haikuArray.push(new Haiku(formattedHaiku, tweets[i].user.screen_name, tweets[i].user.profile_image_url_https));
         }
     }
     for (var j = 0; j < haikuArray.length; j++) {
-        console.log(haikuArray[j]);
-    }
-}
-
-$('.submit').click(function() {
-    var value = $('.twitterSearch').val();
-    var tweetType;
-    if (value[0] === '@') {
-        value[0] = '';
-        tweetType = 'user';
-    }
-    else {
-        tweetType = 'search';
+        console.log(haikuArray[j].haiku);
     }
 
-    $.ajax({
-        url: '/',
-        type: 'POST',
-        contentType: "application/json",
-        data: JSON.stringify({type: tweetType, twitterHandle: value}),
-        complete: function() {
-            console.log('process done');
+    app.haikus = haikuArray;
+};
+
+var app = new Vue({
+    el: '.app',
+    data: {
+        title: 'Twitter Haiku',
+        search: true,
+        loading: false,
+        retrieving: false,
+        haikus: [],
+        index: 0
+    },
+    methods: {
+        searchTweets: function(event) {
+            this.search = false;
+            this.loading = true;
+            this.retrieving = true;
+
+            var value = $('.twitterSearch').val();
+            var tweetType;
+            if (value[0] === '@') {
+                value[0] = '';
+                tweetType = 'user';
+            }
+            else {
+                tweetType = 'search';
+            }
+
+            $.ajax({
+                url: '/',
+                type: 'POST',
+                contentType: "application/json",
+                data: JSON.stringify({type: tweetType, twitterHandle: value}),
+                complete: function() {
+
+                },
+                success: function(data) {
+                    app.hideRetrieving();
+                    createHaikuTweets(data.tweets);
+                    app.hideLoading();
+                    console.log(data.tweets);
+                },
+                error: function() {
+                    console.log('There was an error');
+                }
+            })
         },
-        success: function(data) {
-            createHaikuTweets(data.tweets, tweetType);
+        reSearchTweets: function() {
+            this.searchTweets();
+            this.index = 0;
         },
-        error: function() {
-            console.log('There was an error');
+        hideLoading: function() {
+            this.loading = false;
+        },
+        hideRetrieving: function() {
+            console.log('hello');
+            this.retrieving = false;
+        },
+        twitterLink: function() {
+            return "https://twitter.com/" + haikus[index].userName;
         }
-    })
-})
+    }
+});
+
+$("#twitterSearch").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        app.loading = true;
+        app.searchTweets();
+        console.log('hi');
+    }
+});
+
+$("#fixedTwitterSearch").on('keyup', function (e) {
+    if (e.keyCode == 13) {
+        app.loading = true;
+        app.searchTweets();
+        console.log('hi');
+    }
+});

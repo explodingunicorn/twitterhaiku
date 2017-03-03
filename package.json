@@ -1,10 +1,10 @@
 {
-  "name": "alternatetwitmension",
+  "name": "twitterhaiku",
   "version": "1.0.0",
-  "description": "Get alternate universe tweets",
+  "description": "Get tweets that are also haikus",
   "main": "main.js",
   "scripts": {
-    "test": "start"
+    "start": "node main.js"
   },
   "keywords": [
     "Twitter",
@@ -19,5 +19,8 @@
     "express": "^4.14.1",
     "twitter": "^1.7.0",
     "vue": "^2.2.1"
+},
+  "engines": {
+    "node": "7.4.0"
   }
 }
