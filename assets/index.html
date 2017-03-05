@@ -7,34 +7,39 @@
 
     <body>
         <div class="app">
-            <div v-if="!loading && !search" class="searchBar">
+            <div v-if="state.tweets" class="searchBar">
                 <input id="fixedTwitterSearch" class="twitterSearch" type="text" name="twitterHandle" placeholder="@User, #trend, or any word" @keyup.enter="reSearchTweets"//>
             </div>
             <div class="center">
-                <div v-if="search">
+                <div v-if="state.search">
                     <h1>{{title}}</h1>
                     <p>How many tweets have accidentally created a beautiful poem? This project aims to answer that question. Search a username or topic on twitter and see if any of the tweets are Haiku's.</p>
                     <input class="twitterSearch" type="text" name="twitterHandle" placeholder="@User, #trend, or any word" @keyup.enter="searchTweets"/>
                     <h2 v-on:click="searchTweets" class="submit">search</h2>
                 </div>
-                <div v-if="loading && retrieving">
+                <div v-if="state.retrieving">
                     <h1>Retrieving tweets<span class="blink1">.</span><span class="blink2">.</span><span class="blink3">.</span></h1>
                 </div>
-                <div v-if="loading && !retrieving">
+                <div v-if="state.analyzing">
                     <h1 v-if="!retrieving">Tweets Recieved</h1>
                     <h1 v-if="!retrieving">Analyzing tweets<span class="blink1">.</span><span class="blink2">.</span><span class="blink3">.</span></h1>
                 </div>
-                <div class="haikus">
-                    <div v-if="!loading && !search">
+                <div v-if="state.noResults">
+                    <h1>Sorry, no results.</h1>
+                    <input class="twitterSearch" type="text" name="twitterHandle" placeholder="@User, #trend, or any word" @keyup.enter="searchTweets"/>
+                    <h2 v-on:click="searchTweets" class="submit">search</h2>
+                </div>
+                <div v-if="state.tweets">
+                    <div class="haikus">
                         <img v-bind:src="haikus[index].userImg" />
                         <a class="twitterHandle" v-bind:href="twitterExtension + haikus[index].userName">@{{haikus[index].userName}}</a>
                         <div v-html="haikus[index].haiku"></div>
                     </div>
-                </div>
-                <div class="navigation" v-if="!loading && !search">
-                    <h3 v-if="index > 0" v-on:click="index--" class="move">< prev</h3>
-                    <h3>{{index+1}} of {{haikus.length}}</h3>
-                    <h3 v-if="index < haikus.length - 1" v-on:click="index++" class="move">next ></h3>
+                    <div class="navigation">
+                        <h3 v-if="index > 0" v-on:click="index--" class="move">< prev</h3>
+                        <h3>{{index+1}} of {{haikus.length}}</h3>
+                        <h3 v-if="index < haikus.length - 1" v-on:click="index++" class="move">next ></h3>
+                    </div>
                 </div>
             </div>
         </div>

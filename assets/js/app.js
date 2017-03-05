@@ -175,18 +175,24 @@ var app = new Vue({
     el: '.app',
     data: {
         title: 'Twitter Haiku',
+        state: {
+            search: true,
+            retrieving: false,
+            analyzing: false,
+            tweets: false,
+            noResults: false
+        },
         search: true,
         loading: false,
         retrieving: false,
+        noResults: false,
         haikus: [],
         twitterExtension: 'https://twitter.com/',
         index: 0
     },
     methods: {
         searchTweets: function(event) {
-            this.search = false;
-            this.loading = true;
-            this.retrieving = true;
+            this.setState('retrieving');
 
             var value = $('.twitterSearch').val();
             var tweetType;
@@ -207,15 +213,40 @@ var app = new Vue({
 
                 },
                 success: function(data) {
-                    app.hideRetrieving();
-                    createHaikuTweets(data.tweets);
-                    app.hideLoading();
-                    console.log(data.tweets);
+                    app.setState('analyzing');
+                    console.log(data);
+                    if (data.tweets && data.tweets.length > 0) {
+                        setTimeout(function() {
+                            createHaikuTweets(data.tweets);
+                            if (app.haikus.length < 1) {
+                                app.setState('noResults');
+                            }
+                            else {
+                                app.setState('tweets');
+                            }
+                        },100);
+                    }
+                    else {
+                        app.setState('noResults');
+                    }
                 },
                 error: function() {
                     console.log('There was an error');
                 }
             })
+        },
+        setState: function(newState) {
+            for (var key in this.state) {
+                if (this.state.hasOwnProperty(key)) {
+                    if (key == newState) {
+                        this.state[key] = true;
+                    }
+                    else {
+                        this.state[key] = false;
+                    }
+                    console.log('setting ' + key + ' false');
+                }
+            }
         },
         reSearchTweets: function() {
             this.searchTweets();
@@ -225,7 +256,6 @@ var app = new Vue({
             this.loading = false;
         },
         hideRetrieving: function() {
-            console.log('hello');
             this.retrieving = false;
         },
         twitterLink: function() {

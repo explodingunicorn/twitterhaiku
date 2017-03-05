@@ -42,6 +42,7 @@ var getSearchTweets = function(params, callback, count) {
                 console.log('done');
             }
         } else {
+            callback([]);
             console.log(error);
         }
     });
@@ -66,6 +67,7 @@ var getUserTweets = function(params, callback) {
                 console.log('done');
             }
         } else {
+            callback([]);
             console.log(error);
         }
     });
