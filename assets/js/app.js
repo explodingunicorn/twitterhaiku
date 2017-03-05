@@ -179,6 +179,7 @@ var app = new Vue({
         loading: false,
         retrieving: false,
         haikus: [],
+        twitterExtension: 'https://twitter.com/',
         index: 0
     },
     methods: {
@@ -230,21 +231,5 @@ var app = new Vue({
         twitterLink: function() {
             return "https://twitter.com/" + haikus[index].userName;
         }
-    }
-});
-
-$("#twitterSearch").on('keyup', function (e) {
-    if (e.keyCode == 13) {
-        app.loading = true;
-        app.searchTweets();
-        console.log('hi');
-    }
-});
-
-$("#fixedTwitterSearch").on('keyup', function (e) {
-    if (e.keyCode == 13) {
-        app.loading = true;
-        app.searchTweets();
-        console.log('hi');
     }
 });
