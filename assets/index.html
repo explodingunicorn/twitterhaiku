@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="./css/style.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
     <body>
@@ -14,7 +15,7 @@
                     <h1>{{title}}</h1>
                     <p>Search a username or topic on twitter and see if any of the tweets are Haiku's.</p>
                     <input class="twitterSearch" type="text" name="twitterHandle" placeholder="@User or Search Term" @keyup.enter="searchTweets"/>
-                    <h2 v-on:click="searchTweets" class="submit">SEARCH</h2>
+                    <h2 v-on:click="searchTweets" class="submit">search</h2>
                 </div>
                 <div v-if="loading && retrieving">
                     <h1>Retrieving tweets<span class="blink1">.</span><span class="blink2">.</span><span class="blink3">.</span></h1>

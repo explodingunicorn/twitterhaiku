@@ -164,3 +164,38 @@ img {
     animation: blink3 3s infinite;
     display: inline-block;
 }
+
+@media only screen and (min-width: 1025px) and (max-width: 1500px){
+    .center {
+        width: 70%;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .center {
+        width: 80%;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    h1 {
+        font-size: 34px;
+    }
+
+    .haikus p {
+        font-size: 20px;
+    }
+
+    .center {
+        width: 95%;
+        /*position: relative;
+        top: 0;
+        transform: translateY(0%);*/
+    }
+
+    .searchBar {
+        position: fixed;
+        width: 95%;
+        margin-left: 2.5%;
+    }
+}

@@ -140,25 +140,28 @@ var createHaikuTweets = function(data) {
 
     var tweetText;
     var haikuArray = [];
+    var containsLink = false;
     for (var i = 0; i < tweets.length; i++) {
         var tweet = tweets[i].text;
+        containsLink = false;
         tweetArray = tweet.split(" ");
         for (var j = 0; j < tweetArray.length; j++) {
             if(tweetArray[j][0] === '@' || tweetArray[j][0] === '#') {
                 tweetArray[j][0] = '';
             }
             else if (tweetArray[j].substring(0,4) === 'http')  {
-                tweetArray.splice(j, 1);
-                j--;
+                containsLink = true;
             }
         }
-        untokenizedText = RiTa.untokenize(tweetArray)
-        tweetText += untokenizedText + ' ';
-        var haikuForm = isHaiku(untokenizedText);
+        if(!containsLink) {
+            untokenizedText = RiTa.untokenize(tweetArray)
+            tweetText += untokenizedText + ' ';
+            var haikuForm = isHaiku(untokenizedText);
 
-        if (haikuForm) {
-            formattedHaiku = formatHaiku(tweet, haikuForm);
-            haikuArray.push(new Haiku(formattedHaiku, tweets[i].user.screen_name, tweets[i].user.profile_image_url_https));
+            if (haikuForm) {
+                formattedHaiku = formatHaiku(tweet, haikuForm);
+                haikuArray.push(new Haiku(formattedHaiku, tweets[i].user.screen_name, tweets[i].user.profile_image_url_https));
+            }
         }
     }
     for (var j = 0; j < haikuArray.length; j++) {
