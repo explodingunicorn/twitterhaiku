@@ -8,7 +8,7 @@
     <body>
         <div class="app">
             <div v-if="state.tweets" class="searchBar">
-                <input id="fixedTwitterSearch" class="twitterSearch" type="text" name="twitterHandle" placeholder="@User, #trend, or any word" @keyup.enter="reSearchTweets"//>
+                <input id="fixedTwitterSearch" class="twitterSearch" autofocus type="text" name="twitterHandle" placeholder="@User, #trend, or any word" @keyup.enter="reSearchTweets"//>
             </div>
             <div class="center">
                 <div v-if="state.search">
