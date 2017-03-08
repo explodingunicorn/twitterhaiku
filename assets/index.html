@@ -14,7 +14,7 @@
                 <div v-if="state.search">
                     <h1>{{title}}</h1>
                     <p>How many tweets have accidentally created a beautiful poem? This project aims to answer that question. Search a username or topic on twitter and see if any of the tweets are Haiku's.</p>
-                    <input class="twitterSearch" type="text" name="twitterHandle" placeholder="@User, #trend, or any word" @keyup.enter="searchTweets" autofocus/>
+                    <input class="twitterSearch" autofocus type="text" name="twitterHandle" placeholder="@User, #trend, or any word" @keyup.enter="searchTweets"/>
                     <h2 v-on:click="searchTweets" class="submit">search</h2>
                 </div>
                 <div v-if="state.retrieving">
