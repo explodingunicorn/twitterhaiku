@@ -6,6 +6,9 @@
     </head>
 
     <body>
+        <div class="loading center">
+            <h1>Twitter Haiku is loading<span class="blink1">.</span><span class="blink2">.</span><span class="blink3">.</span></h1>
+        </div>
         <div class="app">
             <div v-if="state.tweets" class="searchBar">
                 <input id="fixedTwitterSearch" class="twitterSearch" autofocus type="text" name="twitterHandle" placeholder="@User, #trend, or any word" @keyup.enter="reSearchTweets"//>

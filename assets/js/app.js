@@ -171,6 +171,11 @@ var createHaikuTweets = function(data) {
     app.haikus = haikuArray;
 };
 
+$(document).ready(function() {
+    $('.loading').css('display', 'none');
+    $('.app').css('display', 'block');
+})
+
 var app = new Vue({
     el: '.app',
     data: {
