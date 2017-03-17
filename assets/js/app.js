@@ -63,8 +63,6 @@ function isHaiku(text) {
 }
 
 function checkSyllables(trimmedText, originalText) {
-    console.log('checking haiku');
-    console.log(trimmedText);
     var text = trimmedText;
     var sylCount = 0;
     var check5 = false;
@@ -110,7 +108,6 @@ function checkSyllables(trimmedText, originalText) {
     }
 
     if (check7) {
-        console.log('This is a haiku:');
         return (haikuFormation);
     }
     else {
@@ -120,15 +117,12 @@ function checkSyllables(trimmedText, originalText) {
 
 var formatHaiku = function(text, form) {
     var textArr = text.split(' ');
-    console.log(form);
     for (var i = 0; i < textArr.length; i++) {
         if(i === form.firstLine) {
             textArr[i] = textArr[i] + '<br>';
-            console.log('newline');
         }
         else if(i === form.secondLine) {
             textArr[i] = textArr[i] + '<br>';
-            console.log('newline');
         }
     }
 
@@ -163,9 +157,6 @@ var createHaikuTweets = function(data) {
                 haikuArray.push(new Haiku(formattedHaiku, tweets[i].user.screen_name, tweets[i].user.profile_image_url_https));
             }
         }
-    }
-    for (var j = 0; j < haikuArray.length; j++) {
-        console.log(haikuArray[j].haiku);
     }
 
     app.haikus = haikuArray;
@@ -219,7 +210,6 @@ var app = new Vue({
                 },
                 success: function(data) {
                     app.setState('analyzing');
-                    console.log(data);
                     if (data.tweets && data.tweets.length > 0) {
                         setTimeout(function() {
                             createHaikuTweets(data.tweets);
@@ -249,7 +239,6 @@ var app = new Vue({
                     else {
                         this.state[key] = false;
                     }
-                    console.log('setting ' + key + ' false');
                 }
             }
         },
